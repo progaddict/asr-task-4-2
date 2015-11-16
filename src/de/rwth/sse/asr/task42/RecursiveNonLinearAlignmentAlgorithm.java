@@ -3,15 +3,20 @@ package de.rwth.sse.asr.task42;
 import java.util.List;
 
 public class RecursiveNonLinearAlignmentAlgorithm implements ITimeAlignmentAlgorithm {
-    private static final long INFINITY = 1000000000;
-    private static final int T0 = 2;
-    private static final int T1 = 0;
-    private static final int T2 = 2;
+    protected static final long INFINITY = 1000000000;
+    protected static final int T0 = 2;
+    protected static final int T1 = 0;
+    protected static final int T2 = 2;
 
-    private AlgorithmRuntimeStatistics algStats;
-    private List<Integer> sample;
-    private List<Integer> signal;
-    private Alignment alignment;
+    protected AlgorithmRuntimeStatistics algStats;
+    protected List<Integer> sample;
+    protected List<Integer> signal;
+    protected Alignment alignment;
+
+    @Override
+    public String toString() {
+        return "Naive recursive algorithm";
+    }
 
     @Override
     public Alignment align(List<Integer> sample, List<Integer> signal) {
@@ -21,12 +26,16 @@ public class RecursiveNonLinearAlignmentAlgorithm implements ITimeAlignmentAlgor
         algStats = new AlgorithmRuntimeStatistics();
         final int alignmentLength = signal.size();
         alignment = new Alignment();
-        alignment.s = new int[alignmentLength];
-        alignment.t = new int[alignmentLength];
+        final int s[] = alignment.s = new int[alignmentLength];
+        final int t[] = alignment.t = new int[alignmentLength];
+        s[0] = 0;
+        t[0] = 0;
+        s[alignmentLength - 1] = signal.size() - 1;
+        t[alignmentLength - 1] = alignmentLength - 1;
         for (int i = 0; i < alignmentLength; i++) {
-            alignment.t[i] = i;
+            t[i] = i;
         }
-        alignInternal(sample.size() - 1, signal.size() - 1);
+        alignment.totalCost = alignInternal(sample.size() - 1, signal.size() - 1);
         final long finishTime = System.currentTimeMillis();
         algStats.runningTimeMilliseconds = finishTime - startTime;
         return alignment;
@@ -37,9 +46,8 @@ public class RecursiveNonLinearAlignmentAlgorithm implements ITimeAlignmentAlgor
         return algStats;
     }
 
-    private long alignInternal(int s, int t) {
+    protected long alignInternal(int s, int t) {
         algStats.totalOperations++;
-        System.out.println(s + " " + t);
         if (t < 0 || s < 0) {
             return INFINITY;
         }
@@ -69,14 +77,9 @@ public class RecursiveNonLinearAlignmentAlgorithm implements ITimeAlignmentAlgor
         return d + minimalCost;
     }
 
-    private long getDistance(int s, int t) {
+    protected long getDistance(int s, int t) {
         algStats.totalOperations++;
         algStats.distanceCalculations++;
         return Math.abs(sample.get(s) - signal.get(t));
-    }
-
-    @Override
-    public String toString() {
-        return "Naive recursive algorithm";
     }
 }
