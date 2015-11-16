@@ -13,8 +13,10 @@ public class RecursiveNonLinearAlignmentWithMemorizationAlgorithm extends Recurs
 
     @Override
     public Alignment align(List<Integer> sample, List<Integer> signal) {
-        results = new long[signal.size()][sample.size()];
-        isMemorized = new boolean[signal.size()][sample.size()];
+        final int sLength = sample.size();
+        final int tLength = signal.size();
+        results = new long[tLength][sLength];
+        isMemorized = new boolean[tLength][sLength];
         return super.align(sample, signal);
     }
 

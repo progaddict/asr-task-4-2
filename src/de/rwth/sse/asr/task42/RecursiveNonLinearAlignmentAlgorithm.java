@@ -23,19 +23,19 @@ public class RecursiveNonLinearAlignmentAlgorithm implements ITimeAlignmentAlgor
         final long startTime = System.currentTimeMillis();
         this.sample = sample;
         this.signal = signal;
+        final int sLength = sample.size();
+        final int tLength = signal.size();
         algStats = new AlgorithmRuntimeStatistics();
-        final int alignmentLength = signal.size();
+        final int alignmentLength = tLength;
         alignment = new Alignment();
         final int s[] = alignment.s = new int[alignmentLength];
         final int t[] = alignment.t = new int[alignmentLength];
         s[0] = 0;
-        t[0] = 0;
-        s[alignmentLength - 1] = signal.size() - 1;
-        t[alignmentLength - 1] = alignmentLength - 1;
+        s[alignmentLength - 1] = sLength - 1;
         for (int i = 0; i < alignmentLength; i++) {
             t[i] = i;
         }
-        alignment.totalCost = alignInternal(sample.size() - 1, signal.size() - 1);
+        alignment.totalCost = alignInternal(sLength - 1, tLength - 1);
         final long finishTime = System.currentTimeMillis();
         algStats.runningTimeMilliseconds = finishTime - startTime;
         return alignment;
