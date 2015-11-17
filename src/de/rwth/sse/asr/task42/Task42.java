@@ -15,6 +15,7 @@ public class Task42 {
         ITimeAlignmentAlgorithm[] algorithms = new ITimeAlignmentAlgorithm[]{
                 // new RecursiveNonLinearAlignmentAlgorithm(),
                 new RecursiveNonLinearAlignmentWithMemorizationAlgorithm(),
+                new IterativeNonLinearAlignmentAlgorithm(),
         };
         for (int i = 0; i < algorithms.length; i++) {
             ITimeAlignmentAlgorithm algorithm = algorithms[i];
