@@ -13,7 +13,10 @@ public class Task42 {
         List<Integer> signal = readIntegersSequence("test.dat");
         System.out.println("Signal length =  " + signal.size());
         ITimeAlignmentAlgorithm[] algorithms = new ITimeAlignmentAlgorithm[]{
-                // new RecursiveNonLinearAlignmentAlgorithm(),
+                // the naive recursive algorithm runs forever
+                // that is why it is commented out
+                /* new RecursiveNonLinearAlignmentAlgorithm(), */
+                // the other two perform a lot better:
                 new RecursiveNonLinearAlignmentWithMemorizationAlgorithm(),
                 new IterativeNonLinearAlignmentAlgorithm(),
         };

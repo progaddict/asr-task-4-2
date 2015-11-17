@@ -48,30 +48,43 @@ public class RecursiveNonLinearAlignmentAlgorithm implements ITimeAlignmentAlgor
 
     protected long alignInternal(int s, int t) {
         algStats.totalOperations++;
+        // if we are out of the grid
+        // then return INFINITY
+        // because this cells cannot be used to form a path
         if (t < 0 || s < 0) {
             return INFINITY;
         }
+        // path should start at (0, 0)
+        // otherwise the cell cannot be used for a path construction
         if (t == 0 && s > 0) {
             return INFINITY;
         }
         long d = getDistance(s, t);
+        // start cell (0, 0) can be used for a path construction
         if (t == 0 && s == 0) {
             return d;
         }
+        // transition T0 is always possible
+        // previous checks guarantee that t > 0
+        // so it can be decreased and s stays the same
         long minimalCost = alignInternal(s, t - 1) + T0;
-        alignment.s[t - 1] = s;
+        alignment.s[t - 1] = s; // T0
+        // transition T1 is not always possible
+        // so we need to check if we can decrease s by 1
         if (s > 0) {
             long transition1Cost = alignInternal(s - 1, t - 1) + T1;
             if (transition1Cost < minimalCost) {
                 minimalCost = transition1Cost;
-                alignment.s[t - 1] = s - 1;
+                alignment.s[t - 1] = s - 1; // T1
             }
         }
+        // transition T2 is not always possible
+        // so we need to check if we can decrease s by 2
         if (s > 1) {
             long transition2Cost = alignInternal(s - 2, t - 1) + T2;
             if (transition2Cost < minimalCost) {
                 minimalCost = transition2Cost;
-                alignment.s[t - 1] = s - 2;
+                alignment.s[t - 1] = s - 2; // T2
             }
         }
         return d + minimalCost;
